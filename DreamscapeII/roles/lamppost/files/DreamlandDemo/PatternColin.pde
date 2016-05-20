@@ -353,7 +353,7 @@ class MultiSine extends LXPattern {
       10, 50, 10
     }
   }; 
-  final BasicParameter brightEffect = new BasicParameter("Bright", 6, 0, 10);
+  final BasicParameter brightEffect = new BasicParameter("Bright", 2.3, 0, 10);
   final BasicParameter colorspread = new BasicParameter("clr", 40, 10, 60);
   final BasicParameter saturation = new BasicParameter("sat", 90, 15, 90);
   final BasicParameter hue = new BasicParameter("hue", 0, 0, 360);
@@ -1132,7 +1132,7 @@ class RainbowInsanity extends LXPattern {
 class CrazyWaves extends LXPattern {
 
   private final SinLFO yPos = new SinLFO(0, model.yMax, 8000);
-  private final BasicParameter thickness = new BasicParameter("thick", 1, 1, 5);
+  private final BasicParameter thickness = new BasicParameter("thick", 4, 1, 5);
   private final BasicParameter saturation = new BasicParameter("sat", 20, 0, 100);
 
   public CrazyWaves(LX lx) {
@@ -1153,9 +1153,9 @@ class CrazyWaves extends LXPattern {
 
 class rainbowfade extends LXPattern {
   private final BasicParameter speed = new BasicParameter("speed", .1, 0.02, .5);
-  private final BasicParameter saturation = new BasicParameter("sat", 30, 0, 100);
-  private final BasicParameter ysign = new BasicParameter("ys", -1, -1, 1);
-  private final BasicParameter xsign = new BasicParameter("xs", -1, -1, 1);
+  private final BasicParameter saturation = new BasicParameter("sat", 90, 0, 100);
+  private final BasicParameter ysign = new BasicParameter("ys", .8, -1, 1);
+  private final BasicParameter xsign = new BasicParameter("xs", .8, -1, 1);
   private final BasicParameter zsign = new BasicParameter("zs", -1, -1, 1);
 
   public rainbowfade(LX lx) {
