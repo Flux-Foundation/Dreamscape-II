@@ -31,6 +31,9 @@ float rotationVelocity = 0f;
 Model           model;
 P2LX 			lx;
 LXPattern[]     patterns;
+LXEffect white_wash_effect;
+LXEffect white_wash_effect2;
+
 // Setup establishes the windowing and LX constructs
 void setup() 
 {
@@ -44,6 +47,28 @@ void setup()
 
 
 	// Patterns setup
+	lx.setPatterns(new LXPattern[] {
+		new AskewPlanes(lx),
+		new Cascade(lx),
+		new CrazyWaves(lx),
+		new CrossSections(lx),
+		new LayerDemoPattern(lx),
+		new ParameterWave(lx),
+		new RainbowInsanity(lx),
+		new SeeSaw(lx),
+		new ShiftingPlane(lx),
+		new SparkleTakeOver(lx),
+		new BarbershopLamppostsPattern(lx),
+		new Stripes(lx),
+		new Twinkle(lx),
+		new candycloudstar(lx),
+		new rainbowfade(lx),
+		new rainbowfadeauto(lx),
+		new MultiSine(lx),
+
+	});
+/** FULL LIST COMMENTED OUT
+
 	lx.setPatterns(new LXPattern[] {
 		// new ControlProjectionSpeed(lx),
 		// new HelloWorldPattern(lx),
@@ -98,16 +123,18 @@ void setup()
 //		new LampPostRing(lx),
 
 	});
+***/
 
-  lx.enableAutoTransition(20000);
+  lx.enableAutoTransition(600000);
   LXTransition t = new DissolveTransition(lx).setDuration(5000);
   for (LXPattern p : lx.getPatterns()){
     p.setTransition(t);
   };
   buildOutputs();
-  // thread("psenvsub");
+  thread("psenvsub");
 
-
+	white_wash_effect = new WhitewashEffect(lx);
+	white_wash_effect2 = new Whitewash2Effect(lx);
 
 	// Add pieces of the UI
 	lx.ui.addLayer(
@@ -151,5 +178,4 @@ void draw()
 {
     background(#292929);
 }
-
 

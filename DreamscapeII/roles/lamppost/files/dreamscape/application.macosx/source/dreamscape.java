@@ -1,3 +1,361 @@
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import ddf.minim.*; 
+import heronarts.lx.*; 
+import heronarts.lx.audio.*; 
+import heronarts.lx.color.*; 
+import heronarts.lx.color.LXColor; 
+import heronarts.lx.model.*; 
+import heronarts.lx.modulator.*; 
+import heronarts.lx.output.*; 
+import heronarts.lx.parameter.*; 
+import heronarts.lx.pattern.*; 
+import heronarts.lx.transform.*; 
+import heronarts.lx.transition.*; 
+import heronarts.p2lx.*; 
+import heronarts.p2lx.ui.*; 
+import heronarts.p2lx.ui.control.*; 
+import java.util.*; 
+import processing.opengl.*; 
+import toxi.geom.Vec2D; 
+import toxi.math.noise.PerlinNoise; 
+import toxi.math.noise.SimplexNoise; 
+import heronarts.lx.LX; 
+import heronarts.lx.LXChannel; 
+import heronarts.lx.pattern.LXPattern; 
+import heronarts.lx.parameter.BasicParameter; 
+import heronarts.lx.parameter.LXParameter; 
+import heronarts.lx.parameter.LXParameterListener; 
+import org.zeromq.ZMQ; 
+
+import heronarts.p2lx.ui.control.*; 
+import ddf.minim.*; 
+import heronarts.p2lx.font.*; 
+import heronarts.p2lx.*; 
+import toxi.math.waves.*; 
+import zmq.*; 
+import toxi.geom.mesh2d.*; 
+import heronarts.lx.midi.device.*; 
+import heronarts.lx.modulator.*; 
+import com.google.gson.annotations.*; 
+import heronarts.lx.output.*; 
+import toxi.util.datatypes.*; 
+import ddf.minim.signals.*; 
+import toxi.math.conversion.*; 
+import heronarts.lx.audio.*; 
+import heronarts.lx.*; 
+import toxi.math.*; 
+import org.zeromq.*; 
+import heronarts.lx.color.*; 
+import toxi.math.noise.*; 
+import com.google.gson.internal.*; 
+import ddf.minim.ugens.*; 
+import ddf.minim.effects.*; 
+import com.google.gson.stream.*; 
+import heronarts.lx.pattern.*; 
+import toxi.geom.mesh.subdiv.*; 
+import ddf.minim.analysis.*; 
+import com.google.gson.internal.bind.*; 
+import toxi.geom.mesh.*; 
+import heronarts.lx.effect.*; 
+import heronarts.lx.transform.*; 
+import heronarts.p2lx.ui.*; 
+import heronarts.lx.parameter.*; 
+import com.google.gson.*; 
+import heronarts.p2lx.video.*; 
+import heronarts.p2lx.ui.component.*; 
+import heronarts.lx.transition.*; 
+import toxi.util.events.*; 
+import heronarts.lx.midi.*; 
+import com.google.gson.reflect.*; 
+import heronarts.lx.model.*; 
+import ddf.minim.spi.*; 
+import toxi.util.*; 
+import toxi.geom.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class dreamscape extends PApplet {
+
+// Get all our imports out of the way
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Let's work in feet and inches
+final static int INCHES = 1;
+final static int FEET = 12 * INCHES;
+float rotationPosition = 0f;
+float rotationVelocity = 0f;
+
+// Top-level, we have a model and a P2LX instance
+Model           model;
+P2LX 			lx;
+LXPattern[]     patterns;
+// Setup establishes the windowing and LX constructs
+public void setup() 
+{
+	// Dimension of the window
+	size(1200, 800, OPENGL); 
+
+    model = new Model();
+
+	// Create the P2LX engine for Dreamland
+	lx = new P2LX(this, model);
+
+
+	// Patterns setup
+	lx.setPatterns(new LXPattern[] {
+		// new ControlProjectionSpeed(lx),
+		// new HelloWorldPattern(lx),
+		// new ProjectionLayerTest(lx),
+		// new BarbershopProjection(lx),
+		// new WorkLightMode(lx),
+//		new TestXPattern(lx),
+		// new PythonProjection(lx),
+//		new IteratorTestPattern(lx).setTransition(new DissolveTransition(lx)),
+		new AskewPlanes(lx),
+//		new MoveXPosition(lx),
+//		new MoveYPosition(lx),
+//		new TestHuePattern(lx),
+		// new TestProjectionPattern(lx),
+//		new TestYPattern(lx),
+//		new TestZPattern(lx),
+//		new Bouncing(lx),
+		new Cascade(lx),
+		new CrazyWaves(lx),
+		new CrossSections(lx),
+		new DFC(lx),
+		new LayerDemoPattern(lx),
+		new ParameterWave(lx),
+//		new Pulley(lx),
+//		new Pulse(lx),
+		new RainbowInsanity(lx),
+		new SeeSaw(lx),
+		new ShiftingPlane(lx),
+		new SparkleTakeOver(lx),
+		new Stripes(lx),
+//		new Strobe(lx),
+//		new SweepPattern(lx),
+		new Twinkle(lx),
+//		new block(lx),
+		new candycloudstar(lx),
+		new rainbowfade(lx),
+		new rainbowfadeauto(lx),
+//		new um(lx),
+//		new um2(lx),
+//		new um3_lists(lx),
+		new MultiSine(lx),
+		// new BarbershopLamppostsPattern(lx),
+		// new ColorBarbershopLamppostsPattern(lx),
+
+		// Setup patterns
+//		new LampPostBarIterator(lx),
+		// new StructureIterator(lx),
+		// new CarouselArmIterator(lx),
+		// new CarouselBarIterator(lx),
+		// new CarouselBarPointIterator(lx),
+//		new LampPostBarPointIterator(lx),
+//		new LampPostRing(lx),
+
+	});
+
+  lx.enableAutoTransition(600000);
+  LXTransition t = new DissolveTransition(lx).setDuration(5000);
+  for (LXPattern p : lx.getPatterns()){
+    p.setTransition(t);
+  };
+  buildOutputs();
+  // thread("psenvsub");
+
+
+
+	// Add pieces of the UI
+	lx.ui.addLayer(
+		// Add a 3D scene with a camera. Mouse movements control the camera
+		new UI3dContext(lx.ui){}
+
+		// Look at center of model
+		.setCenter(0, 0, 0)
+
+		// Position ourself some distance away from model
+		.setRadius(40 * FEET)
+
+		// Set how fast the UI can rotate rad/s
+		.setRotationVelocity(12 * PI)
+
+		// Set how fast the UI can rotational acceleration
+		.setRotationAcceleration(6 * PI)
+
+		// Add a point cloud representing the LEDs
+		.addComponent(new UIPointCloud(lx,model).setPointSize(3))
+	);
+
+	// Basic 2-D contorol for channel with draggable windows
+	
+	// Grabs channel 0
+	lx.ui.addLayer(new UIChannelControl(lx.ui, lx.engine.getChannel(0), 4, 4)); 
+	
+	// Threaded control and FPS
+	lx.ui.addLayer(new UIEngineControl(lx.ui, 4, 326));
+
+  // Output control
+  lx.ui.addLayer(new UIOutputControl(lx.ui, 4, 426));
+
+	
+	// Various sliders, knobs and buttons
+	// lx.ui.addLayer(new UIComponentsDemo(lx.ui, width-144, 4)); 
+
+}
+
+public void draw() 
+{
+    background(0xff292929);
+}
+
+
+// Overall dreamscape dimensions
+private static final int LAMPPOST_RADIUS = 17*FEET + 2*INCHES;
+
+// Lamp post parameters
+private static final int NUMBER_OF_LAMPPOSTS = 2;
+private static final int BOTTOM_OF_LP_LED = 54;
+private static final float LP_BAR_HEIGHT = 45.5f;
+private static final float LP_BAR_RADIUS = 2.5f;
+private static final int LP_NLEDS = 19;
+private static final int LP_NBARS = 7;
+
+
+public static class Model extends LXModel {  
+  public final List<LampPost> lampPosts;
+  
+  public Model() {
+    super(new Fixture());
+    Fixture f = (Fixture) this.fixtures.get(0);
+    this.lampPosts = Collections.unmodifiableList(f.lampPosts);
+  }
+  
+  private static class Fixture extends LXAbstractFixture {
+    private final List<LampPost> lampPosts = new ArrayList<LampPost>();
+    
+    Fixture() {
+      // Build lamp posts
+      for (int i = 0; i < NUMBER_OF_LAMPPOSTS; ++i) {
+        LXTransform transform = new LXTransform();
+        float theta = radians(180) * i;
+        transform.push();
+        transform.rotateY(radians(180) * i);
+        transform.translate(LAMPPOST_RADIUS, 0, 0);
+        LampPost lampPost = new LampPost(transform);
+        addPoints(lampPost);
+        this.lampPosts.add(lampPost);
+      }
+    }
+  }
+}
+
+
+private static class LampPost extends LXModel {
+  //private static int NBARS = 7;
+  //private static int NLEDS = 19;
+
+  public final List<Bar> bars;
+  
+  public LampPost(LXTransform transform) {
+    super(new Fixture(transform));
+    Fixture f = (Fixture) this.fixtures.get(0);
+    this.bars = Collections.unmodifiableList(f.bars);
+  }
+  
+  private static class Fixture extends LXAbstractFixture {
+
+    private List<Bar> bars = new ArrayList<Bar>();
+
+    Fixture(LXTransform transform) { 
+      for (int i = 0; i < LP_NBARS; ++i) 
+      {
+        transform.push(); 
+        transform.rotateY(TWO_PI / LP_NBARS * i);
+        Bar bar = new Bar(transform);
+        addPoints(bar);
+        this.bars.add(bar);
+        transform.pop();
+      }
+    }
+  }
+
+  private static class Bar extends LXModel {
+  
+    public Bar(LXTransform transform) {
+      super(new Fixture(transform));
+    }
+    
+    private static class Fixture extends LXAbstractFixture {
+      Fixture(LXTransform transform) {
+        final float spacing = LP_BAR_HEIGHT/ LP_NLEDS;
+        transform.push();
+        transform.translate(-LP_BAR_RADIUS, BOTTOM_OF_LP_LED, 0);
+        for (int i = 0; i < LP_NLEDS; i++) {
+          addPoint(new LXPoint(transform));
+          transform.translate(0, spacing, 0);
+        }
+        transform.pop();
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+abstract class DLPattern extends LXPattern {
+  protected final Model model;
+
+  DLPattern(LX lx) {
+    super(lx);
+    model = (Model)lx.model;
+  }
+}
+
+abstract class DLLayer extends LXLayer{
+  protected final Model model;
+
+  DLLayer(LX lx) {
+    super(lx);
+    model = (Model)lx.model;
+  }
+}
 /**
  * This file has a bunch of example patterns, each illustrating the key
  * concepts and tools of the LX framework.
@@ -6,8 +364,8 @@
 //***************************ASkewPlanes*********************************************
 //***************************ASkewPlanes*********************************************
 
-class AskewPlanes extends DLPattern {
-  private final BasicParameter sat = new BasicParameter("sat", 1, 0.1, 10);
+class AskewPlanes extends LXPattern {
+  private final BasicParameter sat = new BasicParameter("sat", 1, 0.1f, 10);
   private final BasicParameter size = new BasicParameter("size", 18, 3, 20);
   private final BasicParameter clr = new BasicParameter("clr", 256, 90, 340);
   private final BasicParameter stars = new BasicParameter("Stars", 85, 35, 100);
@@ -36,14 +394,14 @@ class AskewPlanes extends DLPattern {
       float av = 1;
       float bv = 1;
       float cv = 1;
-      float denom = 0.1;
+      float denom = 0.1f;
 
       Plane(int i) {
         addModulator(a = new SinLFO(-1, 1, 9324 + 1029*i)).trigger();
         addModulator(b = new SinLFO(-1, 1, 11566 - 1104*i)).trigger();
         addModulator(c = new SinLFO(-50, 50, 7421 + 1000*i * ((i % 2 == 0) ? 1 : -1))).trigger();
       }  
-      void run(double deltaMs) {
+      public void run(double deltaMs) {
         av = a.getValuef();
         bv = b.getValuef();
         cv = c.getValuef();
@@ -127,16 +485,16 @@ class AskewPlanes extends DLPattern {
 //***************************Rainbowfadeauto*********************************************
 //***************************Rainbowfadeauto*********************************************
 
-class rainbowfadeauto extends DLPattern {
+class rainbowfadeauto extends LXPattern {
   //float period = 1000;
   //private final BasicParameter periodT = new BasicParameter("T", 1, .001, 1000);
-  private final BasicParameter speed = new BasicParameter("speed", 5, .1, 25);
+  private final BasicParameter speed = new BasicParameter("speed", 5, .1f, 25);
   private final BasicParameter saturation = new BasicParameter("sat", 100, 30, 100);
   private final BasicParameter bright = new BasicParameter("brite", 100, 40, 100);
   private final SinLFO ysign = new SinLFO(1, -1, 10548);
   private final SinLFO xsign = new SinLFO(-1, 1, 7893);
   private final SinLFO zsign = new SinLFO(1, -1, 6211);
-  private final BasicParameter size = new BasicParameter("size", 2, 1.4, 8);
+  private final BasicParameter size = new BasicParameter("size", 2, 1.4f, 8);
   //private final BasicParameter ysign = new BasicParameter("ys", -1, -1, 1);
   //private final BasicParameter xsign = new BasicParameter("xs", -1, -1, 1);
   //private final BasicParameter zsign = new BasicParameter("zs", -1, -1, 1);
@@ -170,13 +528,13 @@ class rainbowfadeauto extends DLPattern {
 //***************************Rods*********************************************
 //***************************Rods*********************************************
 //***************************Rods*********************************************
-class Rods extends DLPattern {
+class Rods extends LXPattern {
   //private final BasicParameter huerate = new BasicParameter("hue", 88, 1, 360);
   //private final BasicParameter hueup = new BasicParameter("hue", 88, 1, 360);
   private final BasicParameter hue = new BasicParameter("hue", 300, 1, 320);
   private final BasicParameter numberofrodsup = new BasicParameter("up", 15, 4, 100);
   private final BasicParameter numberofrodsdown = new BasicParameter("down", 15, 4, 100);
-  private final BasicParameter speed = new BasicParameter("spd", 0.7, 0.3, 1.2);
+  private final BasicParameter speed = new BasicParameter("spd", 0.7f, 0.3f, 1.2f);
   //private final BasicParameter saturation = new BasicParameter("sat", 100, 0, 100);
   //final SinLFO saturationup = new SinLFO(100, 0, 26432);
   //final SinLFO saturationdown = new SinLFO(0, 100, 14421);
@@ -225,7 +583,7 @@ public void run(double deltaMs) {
         rodx.set(i, random(model.xMin, model.xMax));  
         rody.set(i, 30);  
         rodz.set(i, random(model.zMin, model.zMax));
-        rodspeed.set(i, random(0.8, 2.6));
+        rodspeed.set(i, random(0.8f, 2.6f));
       //  rodhue.set(i, random(280, 310));
       }
     }
@@ -266,7 +624,7 @@ public void run(double deltaMs) {
           {
             colors[p.index] = lx.hsb(
             hv, 
-            min(100, 100 - (abs(p.y - model.cy)*2.3)), 
+            min(100, 100 - (abs(p.y - model.cy)*2.3f)), 
             bv);
           }
         }
@@ -291,7 +649,7 @@ public void run(double deltaMs) {
         rodx.set(i, random(model.xMin, model.xMax));  
         rody.set(i, 1);  
         rodz.set(i, random(model.zMin, model.zMax));
-        rodspeed.set(i, random(0.8, 2.6));
+        rodspeed.set(i, random(0.8f, 2.6f));
       //  rodhue.set(i, random(280, 310));
       }
     }
@@ -331,8 +689,8 @@ public void run(double deltaMs) {
             p.y > rody.get(i) - rodheight/2 && p.y < rody.get(i) + rodheight/2)
           {
             colors[p.index] = lx.hsb(
-            (hv * 1.4) % 360, 
-            min(100, 100 - (abs(p.y - model.cy)*2.3)), 
+            (hv * 1.4f) % 360, 
+            min(100, 100 - (abs(p.y - model.cy)*2.3f)), 
             bv);
           }
         }
@@ -343,7 +701,7 @@ public void run(double deltaMs) {
 //***************************Multisin*********************************************
 //***************************Multisin*********************************************
 //***************************Multisin*********************************************
-class MultiSine extends DLPattern {
+class MultiSine extends LXPattern {
   final int numLayers = 3;
   int[][] distLayerDivisors = {
     {
@@ -353,7 +711,7 @@ class MultiSine extends DLPattern {
       10, 50, 10
     }
   }; 
-  final BasicParameter brightEffect = new BasicParameter("Bright", 2.3, 0, 10);
+  final BasicParameter brightEffect = new BasicParameter("Bright", 2.3f, 0, 10);
   final BasicParameter colorspread = new BasicParameter("clr", 40, 10, 60);
   final BasicParameter saturation = new BasicParameter("sat", 90, 15, 90);
   final BasicParameter hue = new BasicParameter("hue", 0, 0, 360);
@@ -391,7 +749,7 @@ class MultiSine extends DLPattern {
         combinedDistanceSines[0] += sin(TWO_PI * frequencies[i].getValuef() + p.y / distLayerDivisors[0][i]) / numLayers;
         combinedDistanceSines[1] += sin(TWO_PI * frequencies[i].getValuef() + TWO_PI*(p.z / distLayerDivisors[1][i])) / numLayers;
       }
-      float hueVal = (colorspread.getValuef() * sin(TWO_PI * 1.2*(combinedDistanceSines[0] + combinedDistanceSines[1])) + hue.getValuef()) % 360;
+      float hueVal = (colorspread.getValuef() * sin(TWO_PI * 1.2f*(combinedDistanceSines[0] + combinedDistanceSines[1])) + hue.getValuef()) % 360;
       float brightVal = (100 - 100) + 100 * (2 + combinedDistanceSines[0] + combinedDistanceSines[1]) / brightEffect.getValuef();
       float satVal = saturation.getValuef() + 10 * sin(TWO_PI * (combinedDistanceSines[0] + combinedDistanceSines[1]));
       colors[p.index] = lx.hsb(hueVal, satVal, brightVal);
@@ -401,9 +759,9 @@ class MultiSine extends DLPattern {
 //***************************candycloudstar*********************************************
 //***************************candycloudstar*********************************************
 //***************************candycloudstar*********************************************
-class candycloudstar extends DLPattern {
+class candycloudstar extends LXPattern {
   
-  final BasicParameter darkness = new BasicParameter("DARK", 8, 7.5, 8.5);
+  final BasicParameter darkness = new BasicParameter("DARK", 8, 7.5f, 8.5f);
   final BasicParameter scale = new BasicParameter("SCAL", 2400, 300, 3500);
   final BasicParameter speed = new BasicParameter("SPD", 1, 1, 2);
   final BasicParameter strclr = new BasicParameter("strclr", 132, 1, 360);
@@ -490,11 +848,11 @@ private class CandyCloud extends LXLayer {
 //********************************ShiftingPlanes******************************************************************
 //********************************ShiftingPlanes******************************************************************
 
-class ShiftingPlane extends DLPattern {
+class ShiftingPlane extends LXPattern {
 
-  final SinLFO a = new SinLFO(-.2, .2, 5300);
+  final SinLFO a = new SinLFO(-.2f, .2f, 5300);
   final SinLFO b = new SinLFO(1, -1, 13300);
-  final SinLFO c = new SinLFO(-1.4, 1.4, 5700);
+  final SinLFO c = new SinLFO(-1.4f, 1.4f, 5700);
   final SinLFO d = new SinLFO(-10, 10, 9500);
 
   ShiftingPlane(LX lx) {
@@ -515,7 +873,7 @@ class ShiftingPlane extends DLPattern {
     for (LXPoint p : model.points) {
       float d = abs(av*(p.x-model.cx) + bv*(p.y-model.cy) + cv*(p.z-model.cz) + dv) / denom;
       colors[p.index] = lx.hsb(
-      (hv + abs(p.x-model.cx)*.6 + abs(p.y-model.cy)*.9 + abs(p.z - model.cz)) % 360, 
+      (hv + abs(p.x-model.cx)*.6f + abs(p.y-model.cy)*.9f + abs(p.z - model.cz)) % 360, 
       constrain(110 - d*6, 0, 100), 
       constrain(130 - 7*d, 0, 100)
         );
@@ -527,7 +885,7 @@ class ShiftingPlane extends DLPattern {
 //***********************************Puley*******************************************************************
 //***********************************Pulley*******************************************************************
 
-class Pulley extends DLPattern {
+class Pulley extends LXPattern {
 
   final int NUM_DIVISIONS = 16;
   private final Accelerator[] gravity = new Accelerator[NUM_DIVISIONS];
@@ -536,8 +894,8 @@ class Pulley extends DLPattern {
   private final Click reset = new Click(2500);
   private boolean isRising = false;
 
-  private BasicParameter sz = new BasicParameter("SIZE", 0.01);
-  private BasicParameter beatAmount = new BasicParameter("BEAT", 0.25);
+  private BasicParameter sz = new BasicParameter("SIZE", 0.01f);
+  private BasicParameter beatAmount = new BasicParameter("BEAT", 0.25f);
   private BasicParameter yMod = new BasicParameter("BEAT", 1, 0, 1);
 
   Pulley(LX lx) {
@@ -599,22 +957,22 @@ class Pulley extends DLPattern {
       for (Accelerator g : gravity) {
         if (g.getValuef() < 0) {
           g.setValue(-g.getValuef());
-          g.setVelocity(-g.getVelocityf() * random(0.64, 0.84));
+          g.setVelocity(-g.getVelocityf() * random(0.64f, 0.84f));
         }
       }
     }
 
 
     float fPos = 1 - lx.tempo.rampf();
-    if (fPos < .01) {
-      fPos = .02 + 4 * (.2 - fPos);
+    if (fPos < .01f) {
+      fPos = .02f + 4 * (.2f - fPos);
     }
-    float falloff = 100. / (3 + sz.getValuef() * 36 + fPos * beatAmount.getValuef()*48);
+    float falloff = 100.f / (3 + sz.getValuef() * 36 + fPos * beatAmount.getValuef()*48);
     for (LXPoint p : model.points) {
       int gi = (int) constrain((p.x - model.xMin) * NUM_DIVISIONS / (model.xMax - model.xMin), 0, NUM_DIVISIONS-1);
       colors[p.index] = lx.hsb(
-      (lx.getBaseHuef() + abs(p.x - model.cx)*.8 + p.y*.4) % 360, 
-      constrain(130 - p.y*.8, 0, 100), 
+      (lx.getBaseHuef() + abs(p.x - model.cx)*.8f + p.y*.4f) % 360, 
+      constrain(130 - p.y*.8f, 0, 100), 
       max(0, 100 - abs(p.y * yMod.getValuef() - gravity[gi].getValuef())*falloff)
         );
     }
@@ -624,7 +982,7 @@ class Pulley extends DLPattern {
 ////***********************************Bouncyball*******************************************************************
 ////******************************************************************************************************
 ////***********************************Bouncyball*******************************************************************
-//class BouncyBalls extends DLPattern {
+//class BouncyBalls extends LXPattern {
 //  
 //  static final int NUM_BALLS = 1;
 //  
@@ -704,22 +1062,22 @@ class Pulley extends DLPattern {
 //***********************************XC*******************************************************************
 //******************************************************************************************************
 //***********************************XC*******************************************************************
-class CrossSections extends DLPattern {
+class CrossSections extends LXPattern {
 
   final SinLFO x = new SinLFO(0, model.xMax, 5000);
   final SinLFO y = new SinLFO(0, model.yMax, 6000);
   final SinLFO z = new SinLFO(0, model.zMax, 7000);
 
-  final BasicParameter saturation = new BasicParameter("sat", 1, 0.05, 10);
-  final BasicParameter xw = new BasicParameter("XWID", 0.3);
-  final BasicParameter yw = new BasicParameter("YWID", 0.3);
-  final BasicParameter zw = new BasicParameter("ZWID", 0.3);  
-  final BasicParameter xr = new BasicParameter("XRAT", 0.7);
-  final BasicParameter yr = new BasicParameter("YRAT", 0.6);
-  final BasicParameter zr = new BasicParameter("ZRAT", 0.5);
+  final BasicParameter saturation = new BasicParameter("sat", 1, 0.05f, 10);
+  final BasicParameter xw = new BasicParameter("XWID", 0.3f);
+  final BasicParameter yw = new BasicParameter("YWID", 0.3f);
+  final BasicParameter zw = new BasicParameter("ZWID", 0.3f);  
+  final BasicParameter xr = new BasicParameter("XRAT", 0.7f);
+  final BasicParameter yr = new BasicParameter("YRAT", 0.6f);
+  final BasicParameter zr = new BasicParameter("ZRAT", 0.5f);
   final BasicParameter xl = new BasicParameter("XLEV", 1);
   final BasicParameter yl = new BasicParameter("YLEV", 1);
-  final BasicParameter zl = new BasicParameter("ZLEV", 0.5);
+  final BasicParameter zl = new BasicParameter("ZLEV", 0.5f);
 
 
   CrossSections(LX lx) {
@@ -743,7 +1101,7 @@ class CrossSections extends DLPattern {
     //addParameter(zw);
   }
 
-  void onParameterChanged(LXParameter p) {
+  public void onParameterChanged(LXParameter p) {
     if (p == xr) {
       x.setDuration(10000 - 8800*p.getValuef());
     } else if (p == yr) {
@@ -768,25 +1126,25 @@ class CrossSections extends DLPattern {
     float ylv = 100*yl.getValuef();
     float zlv = 100*zl.getValuef();
 
-    float xwv = 100. / (10 + 40*xw.getValuef());
-    float ywv = 100. / (10 + 40*yw.getValuef());
-    float zwv = 100. / (10 + 40*zw.getValuef());
+    float xwv = 100.f / (10 + 40*xw.getValuef());
+    float ywv = 100.f / (10 + 40*yw.getValuef());
+    float zwv = 100.f / (10 + 40*zw.getValuef());
 
     for (LXPoint p : model.points) {
-      color c = 0;
+      int c = 0;
       c = PImage.blendColor(c, lx.hsb(
       (lx.getBaseHuef() + p.x/10 + p.y/3) % 360, 
-      constrain(140 - 1.1*abs(p.x - model.xMax/2.)*saturation.getValuef(), 0, 100)*0.6, 
+      constrain(140 - 1.1f*abs(p.x - model.xMax/2.f)*saturation.getValuef(), 0, 100)*0.6f, 
       max(0, xlv - xwv*abs(p.x - xv))
         ), ADD);
       c = PImage.blendColor(c, lx.hsb(
       (lx.getBaseHuef() + 80 + p.y/10) % 360, 
-      constrain(140 - 2.2*abs(p.y - model.yMax/2.)*saturation.getValuef(), 0, 100)*0.6, 
+      constrain(140 - 2.2f*abs(p.y - model.yMax/2.f)*saturation.getValuef(), 0, 100)*0.6f, 
       max(0, ylv - ywv*abs(p.y - yv))
         ), ADD); 
       c = PImage.blendColor(c, lx.hsb(
       (lx.getBaseHuef() + 160 + p.z / 10 + p.y/2) % 360, 
-      constrain(140 - 2.2*abs(p.z - model.zMax/2.)*saturation.getValuef(), 0, 100)*0.6, 
+      constrain(140 - 2.2f*abs(p.z - model.zMax/2.f)*saturation.getValuef(), 0, 100)*0.6f, 
       max(0, zlv - zwv*abs(p.z - zv))
         ), ADD); 
       colors[p.index] = c;
@@ -798,7 +1156,7 @@ class CrossSections extends DLPattern {
 ////******************************************************************************************************
 ////***********************************CubeBounce*******************************************************************
 //
-//class CubeBounce extends DLPattern {
+//class CubeBounce extends LXPattern {
 //
 //  private final BasicParameter cvel = new BasicParameter("cvel", 1, 1/2, 10);
 //  
@@ -883,7 +1241,7 @@ class CrossSections extends DLPattern {
 ////******************************************************************************************************
 ////***********************************RF*******************************************************************
 //
-//class RainbowRods extends DLPattern {
+//class RainbowRods extends LXPattern {
 //
 //  class Rod {
 //    float rodx;
@@ -1032,7 +1390,7 @@ class CrossSections extends DLPattern {
 
 //--------------------------------xwave------------------------------------------------------------
 
-class ywave extends DLPattern {
+class ywave extends LXPattern {
 
   private final SinLFO yPos = new SinLFO(0, model.yMax, 2000);
 
@@ -1054,7 +1412,7 @@ class ywave extends DLPattern {
 }
 //--------------------------------xwave------------------------------------------------------------
 
-class xwave extends DLPattern {
+class xwave extends LXPattern {
 
   private final SinLFO xPos = new SinLFO(0, model.xMax, 2000);
 
@@ -1077,7 +1435,7 @@ class xwave extends DLPattern {
 //--------------------------------zwave------------------------------------------------------------
 
 
-class zwave extends DLPattern {
+class zwave extends LXPattern {
 
   private final SinLFO zPos = new SinLFO(0, model.zMax, 2000);
 
@@ -1100,7 +1458,7 @@ class zwave extends DLPattern {
 
 //--------------------------------RainbowInsanity------------------------------------------------------------
 
-class RainbowInsanity extends DLPattern {
+class RainbowInsanity extends LXPattern {
 
   private final SinLFO yPos = new SinLFO(0, model.yMax, 1000);
   private final SinLFO brightnessY = new SinLFO(model.yMin, model.yMax, yPos);
@@ -1115,11 +1473,11 @@ class RainbowInsanity extends DLPattern {
     float falloff = 10 / (FEET);
 
     for (LXPoint p : model.points) {
-      float yWave = model.yRange*0.9 * sin(p.y / model.yRange * PI); 
+      float yWave = model.yRange*0.9f * sin(p.y / model.yRange * PI); 
       float distanceFromCenter = dist(p.x, p.y, model.cx, model.cy);
       float distanceFromBrightness = dist(p.y, abs(p.y - model.cy), brightnessY.getValuef(), yWave);
       colors[p.index] = LXColor.hsb(
-      lx.getBaseHuef()/2 * distanceFromCenter*0.2, 
+      lx.getBaseHuef()/2 * distanceFromCenter*0.2f, 
       saturation.getValuef(), 
       max(0, 100 - falloff*distanceFromBrightness)
         );
@@ -1129,7 +1487,7 @@ class RainbowInsanity extends DLPattern {
 
 //--------------------------------crazywaves------------------------------------------------------------
 
-class CrazyWaves extends DLPattern {
+class CrazyWaves extends LXPattern {
 
   private final SinLFO yPos = new SinLFO(0, model.yMax, 8000);
   private final BasicParameter thickness = new BasicParameter("thick", 4, 1, 5);
@@ -1151,11 +1509,11 @@ class CrazyWaves extends DLPattern {
 }
 //--------------------------------Rainbowfade------------------------------------------------------------
 
-class rainbowfade extends DLPattern {
-  private final BasicParameter speed = new BasicParameter("speed", .1, 0.02, .5);
+class rainbowfade extends LXPattern {
+  private final BasicParameter speed = new BasicParameter("speed", .1f, 0.02f, .5f);
   private final BasicParameter saturation = new BasicParameter("sat", 90, 0, 100);
-  private final BasicParameter ysign = new BasicParameter("ys", .8, -1, 1);
-  private final BasicParameter xsign = new BasicParameter("xs", .8, -1, 1);
+  private final BasicParameter ysign = new BasicParameter("ys", .8f, -1, 1);
+  private final BasicParameter xsign = new BasicParameter("xs", .8f, -1, 1);
   private final BasicParameter zsign = new BasicParameter("zs", -1, -1, 1);
 
   public rainbowfade(LX lx) {
@@ -1177,9 +1535,9 @@ class rainbowfade extends DLPattern {
 }
 //--------------------------------DFC------------------------------------------------------------
 
-class DFC extends DLPattern {
+class DFC extends LXPattern {
   private final BasicParameter thickness = new BasicParameter("thick", 6, 1, 20);
-  private final BasicParameter speed = new BasicParameter("speed", 0.05, 0.05, .5);
+  private final BasicParameter speed = new BasicParameter("speed", 0.05f, 0.05f, .5f);
   private final BasicParameter saturation = new BasicParameter("sat", 30, 0, 100);
 
   public DFC(LX lx) {
@@ -1204,14 +1562,14 @@ class DFC extends DLPattern {
 
 
 //--------------------------------sparkletakeover------------------------------------------------------------
-class SparkleTakeOver extends DLPattern {
+class SparkleTakeOver extends LXPattern {
   int[] sparkleTimeOuts;
   int lastComplimentaryToggle = 0;
   int complimentaryToggle = 0;
   boolean resetDone = false;
   final SinLFO timing = new SinLFO(6000, 10000, 20000);
   final SawLFO coverage = new SawLFO(0, 100, timing);
-  final BasicParameter hueVariation = new BasicParameter("HueVar", 0.1, 0.1, 0.4);
+  final BasicParameter hueVariation = new BasicParameter("HueVar", 0.1f, 0.1f, 0.4f);
   float hueSeparation = 180;
   float newHueVal;
   float oldHueVal;
@@ -1249,13 +1607,13 @@ class SparkleTakeOver extends DLPattern {
       float newHueVal = (lx.getBaseHuef() + complimentaryToggle * hueSeparation + hueVariation.getValuef() * p.y) % 360;
       float oldHueVal = (lx.getBaseHuef() + lastComplimentaryToggle * hueSeparation + hueVariation.getValuef() * p.y) % 360;
       if (sparkleTimeOuts[p.index] > millis()) {        
-        colors[p.index] = lx.hsb(newHueVal, (30 + coverage.getValuef()) / 1.3, newBrightVal);
+        colors[p.index] = lx.hsb(newHueVal, (30 + coverage.getValuef()) / 1.3f, newBrightVal);
       } else {
-        colors[p.index] = lx.hsb(oldHueVal, (140 - coverage.getValuef()) / 1.4, oldBrightVal);
+        colors[p.index] = lx.hsb(oldHueVal, (140 - coverage.getValuef()) / 1.4f, oldBrightVal);
         float chance = random(abs(sin((TWO_PI / 360) * p.x * 4) * 50) + abs(sin(TWO_PI * (p.y / 9000))) * 50);
         if (chance > (100 - 100*(pow(coverage.getValuef()/100, 2)))) {
           sparkleTimeOuts[p.index] = millis() + 50000;
-        } else if (chance > 1.1 * (100 - coverage.getValuef())) {
+        } else if (chance > 1.1f * (100 - coverage.getValuef())) {
           sparkleTimeOuts[p.index] = millis() + 100;
         }
       }
@@ -1266,10 +1624,10 @@ class SparkleTakeOver extends DLPattern {
 
 //--------------------------------------------------sparklehelix--------------------------------------------------------------------------
 
-class SparkleHelix extends DLPattern {
-  final BasicParameter minCoil = new BasicParameter("MinCOIL", .02, .005, .05);
-  final BasicParameter maxCoil = new BasicParameter("MaxCOIL", .03, .005, .05);
-  final BasicParameter Coil = new BasicParameter("COIL", .03, .005, .15);
+class SparkleHelix extends LXPattern {
+  final BasicParameter minCoil = new BasicParameter("MinCOIL", .02f, .005f, .05f);
+  final BasicParameter maxCoil = new BasicParameter("MaxCOIL", .03f, .005f, .05f);
+  final BasicParameter Coil = new BasicParameter("COIL", .03f, .005f, .15f);
   final BasicParameter sparkle = new BasicParameter("Spark", 80, 140, 30);
   final BasicParameter sparkleSaturation = new BasicParameter("Sat", 40, 0, 80);
   final BasicParameter counterSpiralStrength = new BasicParameter("Double", 0, 0, 1);
@@ -1300,10 +1658,10 @@ class SparkleHelix extends DLPattern {
     if (getChannel().getFader().getNormalized() == 0) return;
 
     for (LXPoint p : model.points) {
-      float compensatedWidth = (0.7 + .02 / coil.getValuef()) * width.getValuef();
+      float compensatedWidth = (0.7f + .02f / coil.getValuef()) * width.getValuef();
       float spiralVal = max(0, 100 - (100*TWO_PI / (compensatedWidth))*LXUtils.wrapdistf((TWO_PI / 360) * p.x, 8*TWO_PI + spin.getValuef() + coil.getValuef()*(p.y-model.cy), TWO_PI));
       float counterSpiralVal = counterSpiralStrength.getValuef() * max(0, 100 - (100*TWO_PI / (compensatedWidth))*LXUtils.wrapdistf((TWO_PI / 360) * p.x, 8*TWO_PI - spin.getValuef() - coil.getValuef()*(p.y-model.cy), TWO_PI));
-      float hueVal = (hues.getValuef() + .4*p.y) % 360;
+      float hueVal = (hues.getValuef() + .4f*p.y) % 360;
       if (sparkleTimeOuts[p.index] > millis()) {        
         colors[p.index] = lx.hsb(hueVal, sparkleSaturation.getValuef(), 100);
       } else {
@@ -1318,11 +1676,11 @@ class SparkleHelix extends DLPattern {
 
 //----------------------------------------------------------------------------------------------------------------------------
 
-class um extends DLPattern {
-  private final SinLFO fadetime = new SinLFO(1, 0.1, 6000);
+class um extends LXPattern {
+  private final SinLFO fadetime = new SinLFO(1, 0.1f, 6000);
 
   private final BasicParameter thickness = new BasicParameter("thick", 6, 1, 20);
-  private final BasicParameter speed = new BasicParameter("speed", 0.05, 0.05, .5);
+  private final BasicParameter speed = new BasicParameter("speed", 0.05f, 0.05f, .5f);
   private final BasicParameter saturation = new BasicParameter("sat", 30, 0, 100);
 
 
@@ -1357,11 +1715,11 @@ class um extends DLPattern {
 
 //----------------------------------------------------------------------------------------------------------------------------
 
-class um2 extends DLPattern {
+class um2 extends LXPattern {
   private final SinLFO fadetime = new SinLFO(1, 0, 6000);
 
   private final BasicParameter thickness = new BasicParameter("thick", 6, 1, 20);
-  private final BasicParameter speed = new BasicParameter("speed", 0.05, 0.05, .5);
+  private final BasicParameter speed = new BasicParameter("speed", 0.05f, 0.05f, .5f);
   private final BasicParameter saturation = new BasicParameter("sat", 30, 0, 100);
 
 
@@ -1379,7 +1737,7 @@ class um2 extends DLPattern {
   }
   public void run(double deltaMs) {
 
-    if (fadetime.getValuef() < 0.01) {
+    if (fadetime.getValuef() < 0.01f) {
       pointx = random (model.xMin, model.xMax);
       pointy = random (model.yMin, model.yMax);
       pointz = random (model.zMin, model.zMax);
@@ -1390,7 +1748,7 @@ class um2 extends DLPattern {
       float distancefrompoint = dist(p.x, p.y, p.z, pointx, pointy, pointz);
       colors[p.index] = lx.hsb(millis() * speed.getValuef() - distancefrompoint * thickness.getValuef(), 
       saturation.getValuef(), 
-      max(0, 100 - distancefrompoint * 1.5) * fadetime.getValuef());
+      max(0, 100 - distancefrompoint * 1.5f) * fadetime.getValuef());
     }
   }
 }
@@ -1399,7 +1757,7 @@ class um2 extends DLPattern {
 /*
 //----------------------------------------------------------------------------------------------------------------------------
  
- class um3 extends DLPattern {
+ class um3 extends LXPattern {
  private final SawLFO fadetimeA = new SawLFO(1, 0.01, 3439);
  private final SawLFO fadetimeB = new SawLFO(1, 0.01, 2213);
  private final SawLFO fadetimeC = new SawLFO(1, 0.01, 1284);
@@ -1565,11 +1923,11 @@ class um2 extends DLPattern {
 //----------------------------------------------------------------------------------------------------------------------------
 
 
-class Stripes extends DLPattern {
-  final BasicParameter minSpacing = new BasicParameter("MinSpacing", 0.5, .3, 2.5);
-  final BasicParameter maxSpacing = new BasicParameter("MaxSpacing", 2, .3, 2.5);
+class Stripes extends LXPattern {
+  final BasicParameter minSpacing = new BasicParameter("MinSpacing", 0.5f, .3f, 2.5f);
+  final BasicParameter maxSpacing = new BasicParameter("MaxSpacing", 2, .3f, 2.5f);
   final SinLFO spacing = new SinLFO(minSpacing, maxSpacing, 8000);
-  final SinLFO slopeFactor = new SinLFO(0.05, 0.2, 19000);
+  final SinLFO slopeFactor = new SinLFO(0.05f, 0.2f, 19000);
 
   Stripes(LX lx) {
     super(lx);
@@ -1583,7 +1941,7 @@ class Stripes extends DLPattern {
     if (getChannel().getFader().getNormalized() == 0) return;
 
     for (LXPoint p : model.points) {  
-      float hueVal = (millis()/1000 + .1*p.y) % 360;
+      float hueVal = (millis()/1000 + .1f*p.y) % 360;
       float brightVal = 50 + 50 * sin(spacing.getValuef() * (sin((TWO_PI / 360) * 4 * p.x) + slopeFactor.getValuef() * p.y)); 
       colors[p.index] = lx.hsb(hueVal, 100, brightVal);
     }
@@ -1592,7 +1950,7 @@ class Stripes extends DLPattern {
 //---------------------------------seesaw------------------------------------------------------------------------------
 
 
-class SeeSaw extends DLPattern {
+class SeeSaw extends LXPattern {
 
   final LXProjection projection = new LXProjection(model);
 
@@ -1621,14 +1979,14 @@ class SeeSaw extends DLPattern {
       colors[v.index] = lx.hsb(
       (lx.getBaseHuef() + min(120, abs(v.y))) % 360, 
       100, 
-      max(0, 100 - (100/(1*FEET))*max(0, abs(v.y) - 0.5*width.getValuef()))
+      max(0, 100 - (100/(1*FEET))*max(0, abs(v.y) - 0.5f*width.getValuef()))
         );
     }
   }
 }
 
 //---------------------------------------------------------------------------------------------------------------
-class SweepPattern extends DLPattern {
+class SweepPattern extends LXPattern {
 
   final SinLFO speedMod = new SinLFO(3000, 9000, 5400);
   final SinLFO yPos = new SinLFO(model.yMin, model.yMax, speedMod);
@@ -1653,7 +2011,7 @@ class SweepPattern extends DLPattern {
     addModulator(offset).start();
   }
 
-  void onParameterChanged(LXParameter parameter) {
+  public void onParameterChanged(LXParameter parameter) {
     super.onParameterChanged(parameter);
     if (parameter == speed) {
       float speedVar = 1/speed.getValuef();
@@ -1666,9 +2024,9 @@ class SweepPattern extends DLPattern {
     if (getChannel().getFader().getNormalized() == 0) return;
 
     for (LXPoint p : model.points) {
-      float yp = yPos.getValuef() + amp.getValuef() * sin((p.x - model.cx) * .01 + offset.getValuef());
+      float yp = yPos.getValuef() + amp.getValuef() * sin((p.x - model.cx) * .01f + offset.getValuef());
       colors[p.index] = lx.hsb(
-      (lx.getBaseHuef() + abs(p.x - model.cx) * .2 +  p.z*.1 + p.y*.1) % 360, 
+      (lx.getBaseHuef() + abs(p.x - model.cx) * .2f +  p.z*.1f + p.y*.1f) % 360, 
       constrain(abs(p.y - model.cy), 0, 100), 
       max(0, 100 - (100/width.getValuef())*abs(p.y - yp - height.getValuef()))
         );
@@ -1680,13 +2038,13 @@ class SweepPattern extends DLPattern {
 
 //----------------------------------------------------------------------------------------------------------------------------
 
-class um3_lists extends DLPattern {
+class um3_lists extends LXPattern {
 
 
   private final BasicParameter saturation = new BasicParameter("sat", 45, 0, 70);
   private final BasicParameter dots = new BasicParameter("dots", 6, 1, 8);
-  private final BasicParameter bright = new BasicParameter("bright", .4, 0.3, .6);
-  private final BasicParameter huefactor = new BasicParameter("hue", 1, 0.25, 1.25);
+  private final BasicParameter bright = new BasicParameter("bright", .4f, 0.3f, .6f);
+  private final BasicParameter huefactor = new BasicParameter("hue", 1, 0.25f, 1.25f);
 
 
 
@@ -1717,7 +2075,7 @@ class um3_lists extends DLPattern {
     //int NUM_OF_DOTS = round(dots.getValuef());
 
     for (int i = 0; i < NUM_OF_DOTS; i++) {
-      fadetimes.add(new SawLFO(1, 0.01, int(random(5000, 15000))));
+      fadetimes.add(new SawLFO(1, 0.01f, PApplet.parseInt(random(5000, 15000))));
       pointx.append( random(model.xMin, model.xMax) );
       pointy.append( random(model.xMin, model.xMax) );
       pointz.append( random(model.xMin, model.xMax) );
@@ -1736,7 +2094,7 @@ class um3_lists extends DLPattern {
 
 
     for (int i=0; i < NUM_OF_DOTS; i=i+1) {
-      if (fadetimes.get(i).getValue() < 0.02) {
+      if (fadetimes.get(i).getValue() < 0.02f) {
         pointx.set(i, random(model.xMin, model.xMax));
         pointy.set(i, random(model.xMin, model.xMax));
         pointz.set(i, random(model.xMin, model.xMax));
@@ -1750,7 +2108,7 @@ class um3_lists extends DLPattern {
 
         dfp = dist(p.x, p.y, p.z, pointx.get(i), pointy.get(i), pointz.get(i));
         distancefrompoint.set(i, dfp);
-        float bness=max(0, 100 - distancefrompoint.get(i) * 2.85) * fadetimes.get(i).getValuef();
+        float bness=max(0, 100 - distancefrompoint.get(i) * 2.85f) * fadetimes.get(i).getValuef();
 
         brightnessval.set(i, bness);
 
@@ -1780,7 +2138,7 @@ class um3_lists extends DLPattern {
 //----------------------------------------------------------------------------------------------------------------------------
 //make this animation relative to deltaMs
 
-//class Rods extends DLPattern {
+//class Rods extends LXPattern {
 //  //private final BasicParameter huerate = new BasicParameter("hue", 88, 1, 360);
 //  //private final BasicParameter hueup = new BasicParameter("hue", 88, 1, 360);
 //  private final BasicParameter hue = new BasicParameter("hue", 300, 1, 320);
@@ -1953,7 +2311,7 @@ class um3_lists extends DLPattern {
 
 //-------------
 
-class block extends DLPattern {
+class block extends LXPattern {
 
   final SinLFO growth = new SinLFO(10, 80, 3000);
 
@@ -2012,10 +2370,10 @@ class block extends DLPattern {
 
 
 //====================================================================
-class Twinkle extends DLPattern {
+class Twinkle extends LXPattern {
 
   private SinLFO[] bright;
-  final BasicParameter brightnessParam = new BasicParameter("Brightness", 0.8, 0.5, 1);
+  final BasicParameter brightnessParam = new BasicParameter("Brightness", 0.8f, 0.5f, 1);
   final int numBrights = 18;
   final int density = 20;
   int[] sparkleTimeOuts;
@@ -2074,10 +2432,10 @@ class Twinkle extends DLPattern {
 
 class BoomEffect extends LXEffect {
 
-  final BasicParameter falloff = new BasicParameter("WIDTH", 0.5);
-  final BasicParameter speed = new BasicParameter("SPD", 0.5);
-  final BasicParameter bright = new BasicParameter("BRT", 1.0);
-  final BasicParameter sat = new BasicParameter("SAT", 0.2);
+  final BasicParameter falloff = new BasicParameter("WIDTH", 0.5f);
+  final BasicParameter speed = new BasicParameter("SPD", 0.5f);
+  final BasicParameter bright = new BasicParameter("BRT", 1.0f);
+  final BasicParameter sat = new BasicParameter("SAT", 0.2f);
   List<Layer> layers = new ArrayList<Layer>();
   final float maxr = sqrt(model.xMax*model.xMax + model.yMax*model.yMax + model.zMax*model.zMax) + 10;
 
@@ -2089,13 +2447,13 @@ class BoomEffect extends LXEffect {
       trigger();
     }
 
-    void trigger() {
+    public void trigger() {
       float falloffv = falloffv();
       boom.setRange(-100 / falloffv, maxr + 100/falloffv, 4000 - speed.getValuef() * 3300);
       boom.trigger();
     }
 
-    void run(double deltaMs) {
+    public void run(double deltaMs) {
       float brightv = 100 * bright.getValuef();
       float falloffv = falloffv();
       float satv = sat.getValuef() * 100;
@@ -2104,7 +2462,7 @@ class BoomEffect extends LXEffect {
         addColor(p.index, lx.hsb(
         huev, 
         satv, 
-        constrain(brightv - falloffv*abs(boom.getValuef() - dist(p.x, 2*p.y, 3*p.z, model.xMax/2, model.yMax, model.zMax*1.5)), 0, 100)) 
+        constrain(brightv - falloffv*abs(boom.getValuef() - dist(p.x, 2*p.y, 3*p.z, model.xMax/2, model.yMax, model.zMax*1.5f)), 0, 100)) 
           );
       }
     }
@@ -2175,11 +2533,11 @@ class BoomEffect extends LXEffect {
 
 
 
-class Cascade extends DLPattern {
+class Cascade extends LXPattern {
 
   final BasicParameter size = new BasicParameter("SIZE", 10, 10, 50);
   final BasicParameter rate = new BasicParameter("RATE", 3000, 1500, 6000);
-  final BasicParameter max = new BasicParameter("MAX", 1.9*model.cy, 1.9*model.cy, 1.9*model.yMax);
+  final BasicParameter max = new BasicParameter("MAX", 1.9f*model.cy, 1.9f*model.cy, 1.9f*model.yMax);
   final BasicParameter min = new BasicParameter("MIN", 0, 0, model.cy);
   final BasicParameter xColor = new BasicParameter("X-COLOR", 0);
   final BasicParameter yColor = new BasicParameter("Y-COLOR", 0);
@@ -2235,9 +2593,9 @@ class Cascade extends DLPattern {
 
 
 
-class Strobe extends DLPattern {
+class Strobe extends LXPattern {
   final BasicParameter speed = new BasicParameter("SPEED", 100, 1, 100);
-  float time = 0.;
+  float time = 0.f;
 
   Strobe(LX lx) {
     super(lx);
@@ -2246,7 +2604,7 @@ class Strobe extends DLPattern {
 
   public void run(double deltaMs) {
     time += deltaMs * speed.getValuef();
-    float timeS = time / 1000.;
+    float timeS = time / 1000.f;
 
     for (LXPoint p : model.points) {
       colors[p.index] = lx.hsb(
@@ -2260,11 +2618,11 @@ class Strobe extends DLPattern {
 
 
 
-class Pulse extends DLPattern {
-  final BasicParameter speed = new BasicParameter("SPEED", 1, 0.1, 10);
+class Pulse extends LXPattern {
+  final BasicParameter speed = new BasicParameter("SPEED", 1, 0.1f, 10);
   final BasicParameter hue = new BasicParameter("hue", 45, 0, 360);
   final BasicParameter saturation = new BasicParameter("sat", 100, 0, 100);
-  float time = 0.;
+  float time = 0.f;
 
   Pulse(LX lx) {
     super(lx);
@@ -2275,7 +2633,7 @@ class Pulse extends DLPattern {
 
   public void run(double deltaMs) {
     time += deltaMs * speed.getValuef();
-    float timeS = time / 1000.;
+    float timeS = time / 1000.f;
 
     for (LXPoint p : model.points) {
       colors[p.index] = lx.hsb(
@@ -2302,7 +2660,7 @@ class Pulse extends DLPattern {
 
 
 
-class Bouncing extends DLPattern {
+class Bouncing extends LXPattern {
 
   final BasicParameter size = new BasicParameter("SIZE", 1, 1, 5);
   final BasicParameter rate = new BasicParameter("RATE", 2000, 1000, 4000);
@@ -2360,19 +2718,19 @@ class Bouncing extends DLPattern {
 
 
 
-class ParameterWave extends DLPattern {
+class ParameterWave extends LXPattern {
 
   final BasicParameter amp = new BasicParameter("AMP", 1);
-  final BasicParameter speed = new BasicParameter("SPD", 0.5, -1, 1); 
-  final BasicParameter period = new BasicParameter("PERIOD", 0.5, 0.5, 5);
+  final BasicParameter speed = new BasicParameter("SPD", 0.5f, -1, 1); 
+  final BasicParameter period = new BasicParameter("PERIOD", 0.5f, 0.5f, 5);
   final BasicParameter thick = new BasicParameter("THICK", 2, 1, 5);
   final BasicParameter xColor = new BasicParameter("X-COLOR", 0);
   final BasicParameter yColor = new BasicParameter("Y-COLOR", 0);
   final BasicParameter colorQ = new BasicParameter("clrs", 1, 1, 360);
   final BasicParameter saturation = new BasicParameter("sat", 2, 1, 6);
-  final BasicParameter colorspread = new BasicParameter("clrspd", 2.8, 1, 4);
-  final SinLFO thickness = new SinLFO(0.5, 3, 30324);
-  final SinLFO amplitude = new SinLFO(0, 0.65, 15422);
+  final BasicParameter colorspread = new BasicParameter("clrspd", 2.8f, 1, 4);
+  final SinLFO thickness = new SinLFO(0.5f, 3, 30324);
+  final SinLFO amplitude = new SinLFO(0, 0.65f, 15422);
 
   private float base = 0;
   private float altBase = 0;
@@ -2393,23 +2751,23 @@ class ParameterWave extends DLPattern {
   }
 
   public void run(double deltaMs) {
-    base += deltaMs / 1000. * TWO_PI * speed.getValuef();
+    base += deltaMs / 1000.f * TWO_PI * speed.getValuef();
 
-    altBase += deltaMs / 1000. * TWO_PI * (speed.getValuef() * 1.23);
+    altBase += deltaMs / 1000.f * TWO_PI * (speed.getValuef() * 1.23f);
 
     for (LXPoint p : model.points) {
-      float svy = model.cy + amplitude.getValuef() * model.yRange/2.*sin(base + (p.x - model.cx) / model.xRange * TWO_PI * period.getValuef());
+      float svy = model.cy + amplitude.getValuef() * model.yRange/2.f*sin(base + (p.x - model.cx) / model.xRange * TWO_PI * period.getValuef());
       float hShift =
         abs(p.x - model.cx) / model.xRange * 360 * xColor.getValuef() +
         abs(p.y - model.cy) / model.yRange * 360 * yColor.getValuef();
-      color clr = lx.hsb(
+      int clr = lx.hsb(
       (lx.getBaseHuef() + hShift) % 360, 
      //(lx.getBaseHuef() + p.y) % 360,
       100, 
       max(0, 100 - (100 / (thickness.getValuef()*FEET)) * abs(p.y - svy))
         );
 
-      float svy2 = model.cy + amplitude.getValuef() * model.yRange/2.*sin(altBase + (p.x - model.cx) / model.xRange * TWO_PI * period.getValuef());
+      float svy2 = model.cy + amplitude.getValuef() * model.yRange/2.f*sin(altBase + (p.x - model.cx) / model.xRange * TWO_PI * period.getValuef());
       float hShift2 =
         abs(p.x) / model.xRange * 360 * xColor.getValuef() +
         abs(p.y) / model.yRange * 360 * yColor.getValuef();
@@ -2464,7 +2822,7 @@ class ParameterWave extends DLPattern {
 
 
 /*
-class Fire extends DLPattern {
+class Fire extends LXPattern {
  
  private class Flame {
  public float fheight;
@@ -2537,7 +2895,7 @@ class Fire extends DLPattern {
  
 /*
  //--------------------------------------------fire----------------------------------------------------------------------------------------
- class Fire extends DLPattern {
+ class Fire extends LXPattern {
  final BasicParameter maxHeight = new BasicParameter("HEIGHT", 0.8, 0.3, 1);
  final BasicParameter flameSize = new BasicParameter("SIZE", 30, 10, 75);  
  final BasicParameter flameCount = new BasicParameter ("FLAMES", 75, 0, 75);
@@ -2632,3 +2990,591 @@ class Fire extends DLPattern {
  
  */
 
+class LampPostBarIterator extends DLPattern
+{
+	private final BasicParameter num = new BasicParameter("num" ,0 ,0 ,6);
+	private final SawLFO counter = new SawLFO(0, 6, 1000);
+
+	public LampPostBarIterator(LX lx)
+	{
+		super(lx);
+		addParameter(num);
+		addModulator(counter).trigger();
+	}
+
+	public void run(double deltaMs) 
+	{
+		for (LampPost lp : model.lampPosts)
+		{
+			for(int i = 0; i < 7; i ++)
+			{
+				for(LXPoint p : lp.bars.get(i).points)
+				{
+					colors[p.index] = LXColor.BLACK;
+				}
+			}
+			for (LXPoint p : lp.bars.get((int) num.getValuef()).points)
+			{
+				colors[p.index] = LXColor.WHITE;
+			}
+		}
+	}
+}
+
+
+
+class LampPostBarPointIterator extends DLPattern
+{
+	private final BasicParameter num = new BasicParameter("num" ,0 ,0 ,6);
+	private final BasicParameter pointNum = new BasicParameter("point" ,0 ,0 ,18);
+
+	public LampPostBarPointIterator(LX lx)
+	{
+		super(lx);
+		addParameter(num);
+		addParameter(pointNum);
+	}
+
+	public void run(double deltaMs) 
+	{
+		// List<LampPost> c = model.lampPosts;
+
+		for (LampPost c : model.lampPosts)
+		{
+			for(int i = 0; i < 6; i ++)
+			{
+				for(LXPoint p : c.bars.get(i).points)
+				{
+					colors[p.index] = LXColor.BLACK;
+				}
+			}
+			List<LXPoint> bar = c.bars.get((int) num.getValuef()).points;
+
+			// for(LXPoint bar : c.bars.get((int) num.getValuef()).points)
+			// {
+				for(int i = 0; i < 18; i ++)
+				{
+					for(LXPoint p : bar)
+					{
+						colors[p.index] = LXColor.BLACK;
+					}
+				colors[bar.get((int) pointNum.getValuef()).index] = LXColor.WHITE;
+				// }
+			}
+		}
+	}
+}
+
+class LampPostRing extends DLPattern
+{
+	private final BasicParameter speed = new BasicParameter("speed", 2000, 10000, 100);
+	private final BasicParameter dist = new BasicParameter("dist", 100, 1, 1000);
+	private final TriangleLFO triangle = new TriangleLFO(0, 19, speed);
+
+	public LampPostRing(LX lx)
+	{
+		super(lx);
+		addParameter(speed);
+		addParameter(dist);
+		addModulator(triangle).trigger();
+	}
+
+	public void run(double deltaMs)
+	{
+		for(LampPost lp : model.lampPosts)
+		{
+			for(int i = 0; i < 7; i ++)
+			{
+				for(LXPoint p : lp.bars.get(i).points)
+				{
+					colors[p.index] = LXColor.BLACK;
+				}
+			}
+		}
+
+		for(LampPost lp : model.lampPosts)
+			{
+			for(int i = 0; i < 7; i ++)
+			{
+				List<LXPoint> bar = lp.bars.get(i).points;
+				for(int ii = 0; ii < 18; ii ++)
+				{
+					for(LXPoint p : bar)
+					{
+						float bv = max(0, dist.getValuef() - abs(p.y - triangle.getValuef()));
+						colors[p.index] = lx.hsb(100,100,bv);
+					}
+				colors[bar.get((int) triangle.getValuef()).index] = LXColor.WHITE;
+				// colors[bar.get((int) triangle.getValuef()).index] = lx.hsb(100,100,bv);
+				}
+			}
+		}
+	}
+}
+/**
+ * Here's a simple extension of a camera component. This will be
+ * rendered inside the camera view context. We just override the
+ * onDraw method and invoke Processing drawing methods directly.
+ */
+
+class UIEngineControl extends UIWindow {
+  
+  final UIKnob fpsKnob;
+  
+  UIEngineControl(UI ui, float x, float y) {
+    super(ui, "THREADS AND FPS", x, y, UIChannelControl.WIDTH, 96);
+        
+    y = UIWindow.TITLE_LABEL_HEIGHT;
+    new UIButton(4, y, width-8, 20) {
+      protected void onToggle(boolean enabled) {
+        lx.engine.setThreaded(enabled);
+        fpsKnob.setEnabled(enabled);
+      }
+    }
+    .setActiveLabel("Multi-Threaded")
+    .setInactiveLabel("Single-Threaded")
+    .addToContainer(this);
+    
+    y += 24;
+    fpsKnob = new UIKnob(4, y);    
+    fpsKnob
+    .setParameter(lx.engine.framesPerSecond)
+    .setEnabled(lx.engine.isThreaded())
+    .addToContainer(this);
+  }
+}
+
+class UIOutputControl extends UIWindow {
+  
+  UIOutputControl(UI ui, float x, float y) {
+    super(ui, "LIVE OUTPUT", x, y, UIChannelControl.WIDTH, 50);
+        
+    y = UIWindow.TITLE_LABEL_HEIGHT;
+    new UIButton(4, y, width-8, 20)
+    .setActiveLabel("Enabled")
+    .setInactiveLabel("Disabled")
+    .setInactiveColor(0xff993333)
+    .setParameter(output.enabled)
+    .addToContainer(this);
+  }
+}
+
+class UIComponentsDemo extends UIWindow {
+  
+  static final int NUM_KNOBS = 4; 
+  final BasicParameter[] knobParameters = new BasicParameter[NUM_KNOBS];  
+  
+  UIComponentsDemo(UI ui, float x, float y) {
+    super(ui, "UI COMPONENTS", x, y, 140, 10);
+    
+    for (int i = 0; i < knobParameters.length; ++i) {
+      knobParameters[i] = new BasicParameter("Knb" + (i+1), i+1, 0, 4);
+      knobParameters[i].addListener(new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+          println(p.getLabel() + " value:" + p.getValue());
+        }
+      });
+    }
+    
+    y = UIWindow.TITLE_LABEL_HEIGHT;
+    
+    new UIButton(4, y, width-8, 20)
+    .setLabel("Toggle Button")
+    .addToContainer(this);
+    y += 24;
+    
+    new UIButton(4, y, width-8, 20)
+    .setActiveLabel("Boop!")
+    .setInactiveLabel("Momentary Button")
+    .setMomentary(true)
+    .addToContainer(this);
+    y += 24;
+    
+    for (int i = 0; i < 4; ++i) {
+      new UIKnob(4 + i*34, y)
+      .setParameter(knobParameters[i])
+      .setEnabled(i % 2 == 0)
+      .addToContainer(this);
+    }
+    y += 48;
+    
+    for (int i = 0; i < 4; ++i) {
+      new UISlider(UISlider.Direction.VERTICAL, 4 + i*34, y, 30, 60)
+      .setParameter(new BasicParameter("VSl" + i, (i+1)*.25f))
+      .setEnabled(i % 2 == 1)
+      .addToContainer(this);
+    }
+    y += 64;
+    
+    for (int i = 0; i < 2; ++i) {
+      new UISlider(4, y, width-8, 24)
+      .setParameter(new BasicParameter("HSl" + i, (i + 1) * .25f))
+      .setEnabled(i % 2 == 0)
+      .addToContainer(this);
+      y += 28;
+    }
+    
+    new UIToggleSet(4, y, width-8, 24)
+    .setParameter(new DiscreteParameter("Ltrs", new String[] { "A", "B", "C", "D" }))
+    .addToContainer(this);
+    y += 28;
+    
+    for (int i = 0; i < 4; ++i) {
+      new UIIntegerBox(4 + i*34, y, 30, 22)
+      .setParameter(new DiscreteParameter("Dcrt", 10))
+      .addToContainer(this);
+    }
+    y += 26;
+    
+    new UILabel(4, y, width-8, 24)
+    .setLabel("This is just a label.")
+    .setAlignment(CENTER, CENTER)
+    .setBorderColor(ui.theme.getControlDisabledColor())
+    .addToContainer(this);
+    y += 28;
+    
+    setSize(width, y);
+  }
+} 
+class Button {
+	int counter;
+	String topic;
+	String master;
+	String which;
+	ZMQ_sub sub;
+
+	public Button(String master, String topic, String which){
+		sub = new ZMQ_sub(master, topic, which);
+	}
+}
+/* Build FadeCandy output */
+
+LXOutput output;
+
+class DreamlandFadecandyOutput extends FadecandyOutput {
+  DreamlandFadecandyOutput(LX lx, String host, int port) {
+    super(lx, host, port);
+  }
+  
+  protected void didDispose(Exception x) {
+    println("Fadecandy connection failure: " + host + ":" + port + " - " + x.toString());  
+  }
+}
+
+public void buildOutputs()
+{
+  output = new LXOutputGroup(lx);
+  output.enabled.setValue(true);
+  lx.addOutput(output);
+  output.addChild(new DreamlandFadecandyOutput(lx, "pi8.local", 7890));  // lamppost 1
+  output.addChild(new DreamlandFadecandyOutput(lx, "pi10.local", 7890));  // lamppost 2
+}
+class MoveXPosition extends DLPattern
+{
+	private final float modelMin = model.xMin - 50;
+	private final float modelMax = model.xMax + 50;
+	private final BasicParameter xPos = new BasicParameter("XPos", 100, modelMin, modelMax);
+
+	public MoveXPosition(LX lx)
+	{
+		super(lx);
+    	addParameter(xPos);
+	}
+
+	public void run(double deltaMs) 
+	{
+		float hueValue = lx.getBaseHuef();
+		for (LXPoint p : model.points)
+		{
+			float brightnessValue = max(0, 100 - abs(p.x - xPos.getValuef()));
+			colors[p.index] = lx.hsb(hueValue, 100, brightnessValue);
+		}	
+	}
+}
+
+class MoveYPosition extends DLPattern
+{
+  private final float modelMin = model.yMin - 50;
+  private final float modelMax = model.yMax + 50;
+  private final BasicParameter yPos = new BasicParameter("yPos", 100, modelMin, modelMax);
+  private final BasicParameter falloff = new BasicParameter("fall", 1, 0, 1);
+
+  public MoveYPosition(LX lx)
+  {
+    super(lx);
+      addParameter(yPos);
+      addParameter(falloff);
+  }
+
+  public void run(double deltaMs) 
+  {
+    float hueValue = lx.getBaseHuef();
+    for (LXPoint p : model.points)
+    {
+      float brightnessValue = max(0, 100 - abs(p.y - yPos.getValuef() * falloff.getValuef()));
+      colors[p.index] = lx.hsb(hueValue, 100, brightnessValue);
+    } 
+  }
+}
+
+
+
+
+class TestXPattern extends DLPattern 
+{
+  private final SinLFO xPos = new SinLFO(model.xMin, model.xMax, 4000);
+  public TestXPattern(LX lx) 
+  {
+    super(lx);
+    addModulator(xPos).trigger();
+  }
+  public void run(double deltaMs) 
+  {
+    float hv = lx.getBaseHuef();
+    for (LXPoint p : model.points) 
+    {
+      // This is a common technique for modulating brightness.
+      // You can use abs() to determine the distance between two
+      // values. The further away this point is from an exact
+      // point, the more we decrease its brightness
+      float bv = max(0, 100 - abs(p.x - xPos.getValuef()));
+      colors[p.index] = lx.hsb(hv, 100, bv);
+    }
+  }
+}
+
+class TestHuePattern extends DLPattern 
+{
+  public TestHuePattern(LX lx) 
+  {
+    super(lx);
+  }
+  
+  public void run(double deltaMs) 
+  {
+    // Access the core master hue via this method call
+    float hv = lx.getBaseHuef();
+    for (int i = 0; i < colors.length; ++i) 
+    {
+      colors[i] = lx.hsb(hv, 100, 100);
+    }
+  } 
+}
+
+class TestYPattern extends DLPattern 
+{
+  private final SinLFO yPos = new SinLFO(model.yMin, model.yMax, 4000);
+  public TestYPattern(LX lx) 
+  {
+    super(lx);
+    addModulator(yPos).trigger();
+  }
+  public void run(double deltaMs) 
+  {
+    float hv = lx.getBaseHuef();
+    for (LXPoint p : model.points) 
+    {
+      float bv = max(0, 100 - abs(p.y - yPos.getValuef()));
+      colors[p.index] = lx.hsb(hv, 100, bv);
+    }
+  }
+}
+
+
+class TestZPattern extends DLPattern 
+{
+  private final SinLFO zPos = new SinLFO(model.zMin, model.zMax, 4000);
+  public TestZPattern(LX lx) 
+  {
+    super(lx);
+    addModulator(zPos).trigger();
+  }
+  public void run(double deltaMs) 
+  {
+    float hv = lx.getBaseHuef();
+    for (LXPoint p : model.points) 
+    {
+      float bv = max(0, 100 - abs(p.z - zPos.getValuef()));
+      colors[p.index] = lx.hsb(hv, 100, bv);
+    }
+  }
+}
+
+class LayerDemoPattern extends LXPattern {
+  
+  private final BasicParameter colorSpread = new BasicParameter("Clr", 0.5f, 0, 3);
+  private final BasicParameter stars = new BasicParameter("Stars", 100, 0, 100);
+  
+  public LayerDemoPattern(LX lx) {
+    super(lx);
+    addParameter(colorSpread);
+    addParameter(stars);
+    addLayer(new CircleLayer(lx));
+    addLayer(new RodLayer(lx));
+    for (int i = 0; i < 200; ++i) {
+      addLayer(new StarLayer(lx));
+    }
+  }
+  
+  public void run(double deltaMs) {
+    // The layers run automatically
+  }
+  
+  private class CircleLayer extends LXLayer {
+    
+    private final SinLFO xPeriod = new SinLFO(3400, 7900, 11000); 
+    private final SinLFO brightnessX = new SinLFO(model.xMin, model.xMax, xPeriod);
+  
+    private CircleLayer(LX lx) {
+      super(lx);
+      addModulator(xPeriod).start();
+      addModulator(brightnessX).start();
+    }
+    
+    public void run(double deltaMs) {
+      // The layers run automatically
+      float falloff = 100 / (4*FEET);
+      for (LXPoint p : model.points) {
+        float yWave = model.yRange/2 * sin(p.x / model.xRange * PI); 
+        float distanceFromCenter = dist(p.x, p.y, model.cx, model.cy);
+        float distanceFromBrightness = dist(p.x, abs(p.y - model.cy), brightnessX.getValuef(), yWave);
+        colors[p.index] = LXColor.hsb(
+          lx.getBaseHuef() + colorSpread.getValuef() * distanceFromCenter,
+          100,
+          max(0, 100 - falloff*distanceFromBrightness)
+        );
+      }
+    }
+  }
+  
+  private class RodLayer extends LXLayer {
+    
+    private final SinLFO zPeriod = new SinLFO(2000, 5000, 9000);
+    private final SinLFO zPos = new SinLFO(model.zMin, model.zMax, zPeriod);
+    
+    private RodLayer(LX lx) {
+      super(lx);
+      addModulator(zPeriod).start();
+      addModulator(zPos).start();
+    }
+    
+    public void run(double deltaMs) {
+      for (LXPoint p : model.points) {
+        float b = 100 - dist(p.x, p.y, model.cx, model.cy) - abs(p.z - zPos.getValuef());
+        if (b > 0) {
+          addColor(p.index, LXColor.hsb(
+            lx.getBaseHuef() + p.z,
+            100,
+            b
+          ));
+        }
+      }
+    }
+  }
+  
+  private class StarLayer extends LXLayer {
+    
+    private final TriangleLFO maxBright = new TriangleLFO(0, stars, random(2000, 8000));
+    private final SinLFO brightness = new SinLFO(-1, maxBright, random(3000, 9000)); 
+    
+    private int index = 0;
+    
+    private StarLayer(LX lx) { 
+      super(lx);
+      addModulator(maxBright).start();
+      addModulator(brightness).start();
+      pickStar();
+    }
+    
+    private void pickStar() {
+      index = (int) random(0, model.size-1);
+    }
+    
+    public void run(double deltaMs) {
+      if (brightness.getValuef() <= 0) {
+        pickStar();
+      } else {
+        addColor(index, LXColor.hsb(lx.getBaseHuef(), 50, brightness.getValuef()));
+      }
+    }
+  }
+}
+
+
+String subscribeTo = "motion";
+
+public void psenvsub () {
+    // Prepare our context and subscriber
+    ZMQ.Context context = ZMQ.context(1);
+    ZMQ.Socket subscriber = context.socket(ZMQ.SUB);
+    println("did a thing");
+
+    subscriber.connect("tcp://localhost:6000");
+    subscriber.subscribe(subscribeTo.getBytes());
+    while (!Thread.currentThread ().isInterrupted ()) {
+        // Read message contents
+        String[] message = subscriber.recvStr().split("\\|");
+        String[] contents= message[1].split(",");
+
+        println(contents[1]);
+        rotationPosition = Float.parseFloat(contents[0]);
+        rotationVelocity = Float.parseFloat(contents[1]);
+
+    }
+    subscriber.close ();
+    context.term ();
+}
+
+class ZMQ_pub {
+    String message;
+    String topic;
+    String which;
+    ZMQ.Socket publisher;
+
+    public ZMQ_pub(String master, String topic, String which){
+        ZMQ.Context context = ZMQ.context(1);
+        this.publisher = context.socket(ZMQ.PUB);
+        this.publisher.connect("tcp://" + master + ":6001");
+        this.topic = topic;
+        this.which = which;
+    }
+
+    public void sendMessage(String value){
+        String sayWhat = this.topic + "|" + this.which + "#" + value;
+        this.publisher.send(sayWhat);
+    }
+}
+
+class ZMQ_sub {
+    String message;
+    String topic;
+    String which;
+    String subscribeTo;
+    ZMQ.Socket subscriber;
+
+    public ZMQ_sub(String master, String topic, String which){
+        this.subscribeTo = topic + "|" + which;
+
+        ZMQ.Context context = ZMQ.context(1);
+        this.subscriber = context.socket(ZMQ.SUB);
+        this.subscriber.connect("tcp://" + master + ":6001");
+        this.subscriber.subscribe(this.subscribeTo.getBytes());
+        this.topic = topic;
+        this.which = which;
+    }
+
+    // private recvMessage(){
+    //     String message = subscriber.recvStr();
+    //     // String[] contents = messa
+
+    // }
+}
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "dreamscape" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
+}

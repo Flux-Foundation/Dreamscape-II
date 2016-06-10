@@ -99,7 +99,7 @@ void setup()
 
 	});
 
-  lx.enableAutoTransition(20000);
+  lx.enableAutoTransition(600000);
   LXTransition t = new DissolveTransition(lx).setDuration(5000);
   for (LXPattern p : lx.getPatterns()){
     p.setTransition(t);

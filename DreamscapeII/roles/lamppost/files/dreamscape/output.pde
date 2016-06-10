@@ -16,6 +16,7 @@ void buildOutputs()
 {
   output = new LXOutputGroup(lx);
   output.enabled.setValue(true);
+  //output.enabled.setValue(false);
   lx.addOutput(output);
   output.addChild(new DreamlandFadecandyOutput(lx, "pi8.local", 7890));  // lamppost 1
   output.addChild(new DreamlandFadecandyOutput(lx, "pi10.local", 7890));  // lamppost 2

@@ -1,0 +1,7 @@
+---
+# tasks file for server
+- name: copy masterServer role
+  synchronize:
+    src: "../files/master_server.py"
+    dest: "{{folderPath}}/master_server.py"
+  become: True

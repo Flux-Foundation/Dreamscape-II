@@ -1,26 +1,66 @@
 import org.zeromq.ZMQ;
 
-String subscribeTo = "motion";
+String subscribeTo = "processing";
 
 void psenvsub () {
     // Prepare our context and subscriber
     ZMQ.Context context = ZMQ.context(1);
     ZMQ.Socket subscriber = context.socket(ZMQ.SUB);
-    println("did a thing");
+    println("started sub thread");
 
     subscriber.connect("tcp://localhost:6000");
     subscriber.subscribe(subscribeTo.getBytes());
     while (!Thread.currentThread ().isInterrupted ()) {
         // Read message contents
         String[] message = subscriber.recvStr().split("\\|");
-        String[] contents= message[1].split(",");
+	println("recved zmq");
+        String[] contents = message[1].split("#");
 
-        println(contents[1]);
-        rotationPosition = Float.parseFloat(contents[0]);
-        rotationVelocity = Float.parseFloat(contents[1]);
+        //println("hallo", message[0], "m1", message[1]);
+
+       	println("sub button:", contents[0], contents[1]);
+
+	if (contents[0].equals("giraffe_side")) {
+		println("giraffe", contents[1]);
+
+		if (contents[1].equals("1")){
+			println("giraffe white: on");
+			lx.addEffect(white_wash_effect);
+		} else {
+			println("giraffe white: off");
+	        	lx.removeEffect(white_wash_effect);
+	        	lx.removeEffect(white_wash_effect);
+
+			lx.goNext();
+			LXTransition tran = lx.getTransition();
+			tran.setDuration(10); 
+		}
+
+	} else if (contents[0].equals("igloo_side")) {
+		println("igloo", contents[1]);
+
+		if (contents[1].equals("1")){
+			println("igloo white: on");
+			lx.addEffect(white_wash_effect2);
+		} else {
+			println("igloo white: off");
+	        	lx.removeEffect(white_wash_effect2);
+	        	lx.removeEffect(white_wash_effect2);
+
+			lx.goNext();
+			LXTransition tran = lx.getTransition();
+			tran.setDuration(10); 
+		}
+
+	} 
+
+
+        //println(contents[1]);
+        //rotationPosition = Float.parseFloat(contents[0]);
+        //rotationVelocity = Float.parseFloat(contents[1]);
 
     }
-    subscriber.close ();
+    subscriber.close();
     context.term ();
 }
 

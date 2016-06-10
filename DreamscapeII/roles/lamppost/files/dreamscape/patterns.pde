@@ -129,7 +129,7 @@ class TestZPattern extends DLPattern
   }
 }
 
-class LayerDemoPattern extends LXPattern {
+class LayerDemoPattern extends DLPattern {
   
   private final BasicParameter colorSpread = new BasicParameter("Clr", 0.5, 0, 3);
   private final BasicParameter stars = new BasicParameter("Stars", 100, 0, 100);

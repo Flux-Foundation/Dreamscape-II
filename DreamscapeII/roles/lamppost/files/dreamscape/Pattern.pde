@@ -12,6 +12,10 @@ abstract class DLPattern extends LXPattern {
     super(lx);
     model = (Model)lx.model;
   }
+  void onTransitionEnd(){
+    LXTransition tran = this.getTransition();
+    tran.setDuration(5000);
+  }
 }
 
 abstract class DLLayer extends LXLayer{
